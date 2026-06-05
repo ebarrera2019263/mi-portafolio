@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Erick Barrera — Desarrollador Full Stack</title>
+  <meta name="description" content="Portafolio de Erick Alexander Barrera Ochoa — Desarrollador Full Stack Junior especialista en desarrollo web. Proyectos, experiencia y contacto." />
+
+  <!-- Tipografías recomendadas: Archivo (cuerpo) + Space Grotesk (títulos) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Devicon: logos oficiales a color de cada tecnología -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+
+  <!-- Three.js para efectos 3D del hero -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+
+  <style>
+    /* ============================================================
+       SISTEMA DE DISEÑO — Tokens (monocromático + acento azul)
+       ============================================================ */
+    :root {
+      --primary: #18181B;
+      --on-primary: #FFFFFF;
+      --secondary: #3F3F46;
+      --accent: #2563EB;
+      --accent-hover: #1D4ED8;
+      --bg: #FAFAFA;
+      --surface: #FFFFFF;
+      --fg: #09090B;
+      --muted-fg: #52525B;
+      --muted: #F4F4F5;
+      --border: #E4E4E7;
+
+      --radius: 14px;
+      --radius-sm: 10px;
+      --maxw: 1120px;
+
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.04), 0 1px 3px rgba(0,0,0,.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,.06), 0 10px 30px rgba(0,0,0,.06);
+
+      --ease: cubic-bezier(.22,.61,.36,1);
+    }
+
+    /* Modo oscuro */
+    [data-theme="dark"] {
+      --primary: #FAFAFA;
+      --on-primary: #18181B;
+      --secondary: #A1A1AA;
+      --accent: #3B82F6;
+      --accent-hover: #60A5FA;
+      --bg: #09090B;
+      --surface: #18181B;
+      --fg: #FAFAFA;
+      --muted-fg: #A1A1AA;
+      --muted: #1F1F23;
+      --border: #27272A;
+
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+      --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Archivo', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background .4s var(--ease), color .4s var(--ease);
+    }
+
+    h1, h2, h3, .display {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+    .accent { color: var(--accent); }
+    .muted { color: var(--muted-fg); }
+
+    /* ============================================================
+       NAVBAR
+       ============================================================ */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: saturate(180%) blur(12px);
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 18px; letter-spacing: -0.02em;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .logo .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); display: inline-block; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      padding: 8px 14px; border-radius: 8px; font-size: 15px; font-weight: 500;
+      color: var(--muted-fg); transition: color .2s, background .2s;
+    }
+    .nav-links a:hover { color: var(--fg); background: var(--muted); }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+
+    .icon-btn {
+      width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 10px; border: 1px solid var(--border); background: var(--surface);
+      color: var(--fg); cursor: pointer; transition: background .2s, border-color .2s, transform .15s;
+    }
+    .icon-btn:hover { background: var(--muted); transform: translateY(-1px); }
+    .icon-btn svg { width: 20px; height: 20px; }
+    .lang-btn { width: auto; padding: 0 13px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .04em; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 20px; border-radius: 10px; font-weight: 600; font-size: 15px;
+      cursor: pointer; border: 1px solid transparent; transition: transform .15s var(--ease), background .2s, box-shadow .2s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 35%, transparent); }
+    .btn-ghost { background: transparent; color: var(--fg); border-color: var(--border); }
+    .btn-ghost:hover { background: var(--muted); transform: translateY(-2px); }
+
+    /* ============================================================
+       HERO
+       ============================================================ */
+    .hero { padding: 110px 0 90px; position: relative; overflow: hidden; }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0; opacity: .5;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 40%, transparent 100%);
+    }
+    /* Canvas 3D (Three.js) detrás del contenido del hero */
+    .hero-canvas {
+      position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%;
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative; z-index: 2; max-width: 760px; transform-style: preserve-3d;
+      transition: transform .35s var(--ease); will-change: transform;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 999px; font-size: 13.5px; font-weight: 500;
+      background: var(--surface); border: 1px solid var(--border); color: var(--muted-fg);
+      box-shadow: var(--shadow-sm); margin-bottom: 28px;
+    }
+    .badge .pulse {
+      width: 8px; height: 8px; border-radius: 50%; background: #22C55E; position: relative;
+    }
+    .badge .pulse::after {
+      content: ''; position: absolute; inset: -4px; border-radius: 50%;
+      background: #22C55E; opacity: .35; animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0% { transform: scale(.8); opacity: .5; } 100% { transform: scale(2.2); opacity: 0; } }
+
+    .hero h1 { font-size: clamp(40px, 7vw, 72px); font-weight: 700; margin-bottom: 22px; }
+    .hero h1 .grad {
+      background: linear-gradient(120deg, var(--accent), color-mix(in srgb, var(--accent) 40%, var(--fg)));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero p.lead { font-size: clamp(17px, 2.4vw, 21px); color: var(--muted-fg); max-width: 600px; margin-bottom: 36px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .socials { display: flex; gap: 10px; margin-top: 40px; }
+
+    /* ============================================================
+       SECCIONES
+       ============================================================ */
+    section { padding: 88px 0; }
+    .section-head { margin-bottom: 48px; max-width: 620px; }
+    .eyebrow {
+      font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 14px; display: block;
+    }
+    .section-head h2 { font-size: clamp(28px, 4.5vw, 40px); font-weight: 700; margin-bottom: 14px; }
+    .section-head p { color: var(--muted-fg); font-size: 17px; }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 56px; align-items: start; }
+    .avatar-wrap { perspective: 900px; }
+    .avatar {
+      width: 100%; aspect-ratio: 1; border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--muted), var(--surface));
+      border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+      color: var(--muted-fg); font-size: 15px; overflow: hidden; box-shadow: var(--shadow-md);
+      transform-style: preserve-3d; will-change: transform;
+      transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+      transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+    }
+    .avatar svg, .avatar img { transform: translateZ(30px); }
+    .avatar svg { width: 64px; height: 64px; opacity: .35; }
+    .about-text p { color: var(--muted-fg); font-size: 17px; margin-bottom: 18px; }
+    .about-text p strong { color: var(--fg); font-weight: 600; }
+
+    .stats { display: flex; gap: 36px; margin-top: 28px; flex-wrap: wrap; }
+    .stat .num { font-family: 'Space Grotesk'; font-size: 32px; font-weight: 700; }
+    .stat .lbl { font-size: 14px; color: var(--muted-fg); }
+
+    /* SKILLS / STACK TECNOLÓGICO */
+    .tech-stack { display: grid; gap: 44px; }
+    .tech-group-title {
+      font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600;
+      color: var(--muted-fg); margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+    }
+    .tech-group-title .accent { font-weight: 700; }
+    .tech-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+      gap: 14px; perspective: 800px;
+    }
+    .tech-item {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+      padding: 24px 14px; border-radius: var(--radius-sm);
+      background: var(--surface); border: 1px solid var(--border);
+      position: relative; transform-style: preserve-3d; will-change: transform;
+      transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+      transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s;
+    }
+    .tech-item:hover {
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+      box-shadow: var(--shadow-md);
+    }
+    .tech-item::before {
+      content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0;
+      background: radial-gradient(150px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 18%, transparent), transparent 65%);
+      transition: opacity .3s var(--ease);
+    }
+    .tech-item:hover::before { opacity: 1; }
+    .tech-item i, .tech-item .ti-svg {
+      font-size: 44px; width: 44px; height: 44px; line-height: 1;
+      transform: translateZ(28px); transition: transform .3s var(--ease);
+    }
+    .tech-item .ti-svg { color: var(--fg); }
+    .tech-item:hover i, .tech-item:hover .ti-svg { transform: translateZ(40px) scale(1.08); }
+    .tech-item span {
+      font-size: 14px; font-weight: 600; color: var(--fg); transform: translateZ(16px);
+      text-align: center;
+    }
+
+    /* PROJECTS */
+    .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; perspective: 1000px; counter-reset: card; }
+    .card {
+      counter-increment: card;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; display: flex; flex-direction: column; position: relative;
+      transform-style: preserve-3d; will-change: transform;
+      transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0) scale(var(--cs, 1));
+      transition: transform .35s var(--ease), box-shadow .4s var(--ease), border-color .3s;
+    }
+    .card:hover {
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); --cs: 1.025;
+      box-shadow:
+        var(--shadow-md),
+        0 0 0 1px color-mix(in srgb, var(--accent) 28%, transparent),
+        0 22px 48px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+    /* Brillo que sigue al mouse sobre la tarjeta */
+    .card::before {
+      content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0;
+      background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%);
+      transition: opacity .3s var(--ease);
+    }
+    .card:hover::before { opacity: 1; }
+    /* Barrido de luz diagonal al pasar el cursor */
+    .card::after {
+      content: ''; position: absolute; top: 0; left: -75%; width: 55%; height: 100%;
+      z-index: 5; pointer-events: none; opacity: 0;
+      transform: translateZ(60px) skewX(-18deg);
+      background: linear-gradient(100deg, transparent, color-mix(in srgb, #fff 38%, transparent), transparent);
+    }
+    .card:hover::after { animation: cardShine .9s var(--ease); }
+    @keyframes cardShine {
+      0% { left: -75%; opacity: 0; } 12% { opacity: .8; }
+      100% { left: 135%; opacity: 0; }
+    }
+    /* Los hijos de la tarjeta flotan un poco hacia adelante en 3D */
+    .card-thumb { transform: translateZ(28px); transform-style: preserve-3d; }
+    .card-body { transform: translateZ(18px); }
+    .card-thumb {
+      aspect-ratio: 16/9; background: linear-gradient(135deg, var(--muted), color-mix(in srgb, var(--accent) 12%, var(--surface)));
+      display: flex; align-items: center; justify-content: center; color: var(--muted-fg);
+      position: relative; overflow: hidden;
+    }
+    /* Aurora animada dentro de la miniatura */
+    .card-thumb::before {
+      content: ''; position: absolute; inset: -35%; pointer-events: none;
+      background:
+        radial-gradient(42% 52% at 28% 30%, rgba(255,255,255,.40), transparent 70%),
+        radial-gradient(38% 46% at 76% 70%, rgba(255,255,255,.20), transparent 72%);
+      filter: blur(8px); opacity: .55;
+      animation: auroraMove 9s ease-in-out infinite alternate;
+      transition: opacity .45s var(--ease);
+    }
+    .card:hover .card-thumb::before { opacity: 1; }
+    @keyframes auroraMove {
+      0% { transform: translate(0,0) scale(1) rotate(0deg); }
+      100% { transform: translate(7%,-7%) scale(1.18) rotate(8deg); }
+    }
+    /* Número editorial (01–04) en la esquina de la miniatura */
+    .card-thumb::after {
+      content: counter(card, decimal-leading-zero);
+      position: absolute; top: 12px; left: 14px; z-index: 2;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 12.5px; letter-spacing: .1em;
+      color: #fff; padding: 4px 11px; border-radius: 999px;
+      background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.30);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      transition: transform .3s var(--ease);
+    }
+    .card:hover .card-thumb::after { transform: translateY(-2px) scale(1.06); }
+    .card-thumb .ph { font-size: 14px; opacity: .6; }
+    .card-thumb svg {
+      position: relative; z-index: 2;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,.28));
+      animation: floaty 5s ease-in-out infinite;
+    }
+    @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    /* Miniaturas con captura real: sin aurora, con zoom suave al hover */
+    .card-thumb.has-img::before { display: none; }
+    .card-thumb.has-img img { display: block; transition: transform .5s var(--ease); }
+    .card:hover .card-thumb.has-img img { transform: scale(1.06); }
+    .card-body { padding: 22px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .card-body h3 { font-size: 20px; font-weight: 600; transition: color .25s var(--ease); }
+    .card:hover .card-body h3 { color: var(--accent); }
+    .card-body p { color: var(--muted-fg); font-size: 15px; flex: 1; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+    .tag {
+      font-size: 12.5px; font-weight: 500; padding: 4px 10px; border-radius: 6px;
+      background: var(--muted); color: var(--muted-fg);
+      transition: background .25s var(--ease), color .25s var(--ease), transform .25s var(--ease);
+    }
+    .card:hover .tag { background: color-mix(in srgb, var(--accent) 14%, var(--muted)); color: color-mix(in srgb, var(--accent) 75%, var(--fg)); }
+    /* Credenciales de demo (proyectos con repo privado) */
+    .demo-creds {
+      display: flex; flex-direction: column; gap: 4px;
+      font-size: 12.5px; color: var(--muted-fg);
+      background: var(--muted); border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 12px; margin-top: 2px;
+    }
+    .demo-creds .lock { font-weight: 600; color: var(--fg); }
+    .demo-creds code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 1px 6px; border-radius: 5px; font-size: 12px; color: var(--accent);
+    }
+    .link-private {
+      font-size: 14px; font-weight: 600; color: var(--muted-fg);
+      display: inline-flex; align-items: center; gap: 5px; cursor: default;
+    }
+    .link-private svg { width: 15px; height: 15px; }
+
+    .card-links { display: flex; gap: 16px; padding-top: 4px; align-items: center; }
+    .card-links a { font-size: 14px; font-weight: 600; color: var(--accent); display: inline-flex; align-items: center; gap: 5px; }
+    .card-links a:hover { color: var(--accent-hover); }
+    .card-links svg { width: 15px; height: 15px; transition: transform .25s var(--ease); }
+    .card-links a:hover svg { transform: translate(3px, -3px); }
+
+    /* CONTACT */
+    .contact-card {
+      background: var(--primary); color: var(--on-primary); border-radius: 20px;
+      padding: 64px 48px; text-align: center; position: relative; overflow: hidden;
+    }
+    .contact-card h2 { font-size: clamp(28px, 4.5vw, 42px); font-weight: 700; margin-bottom: 16px; }
+    .contact-card p { color: color-mix(in srgb, var(--on-primary) 70%, transparent); font-size: 18px; max-width: 460px; margin: 0 auto 32px; }
+    .contact-card .btn-primary { background: var(--accent); }
+
+    /* FOOTER */
+    footer { padding: 40px 0; border-top: 1px solid var(--border); }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-inner p { color: var(--muted-fg); font-size: 14.5px; }
+
+    /* ============================================================
+       ANIMACIONES DE SCROLL
+       ============================================================ */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 860px) {
+      .about-grid { grid-template-columns: 1fr; gap: 32px; }
+      .avatar { max-width: 280px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero { padding: 72px 0 64px; }
+      section { padding: 64px 0; }
+      .contact-card { padding: 48px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================ NAVBAR ============================ -->
+  <header>
+    <div class="container nav">
+      <a href="#inicio" class="logo"><span class="dot"></span>Erick&nbsp;Barrera</a>
+      <nav class="nav-links">
+        <a href="#sobre-mi" data-i18n="nav.about">Sobre mí</a>
+        <a href="#skills" data-i18n="nav.skills">Skills</a>
+        <a href="#proyectos" data-i18n="nav.projects">Proyectos</a>
+        <a href="#contacto" data-i18n="nav.contact">Contacto</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-btn lang-btn" id="langToggle" aria-label="Cambiar idioma / Switch language"><span id="langLabel">EN</span></button>
+        <button class="icon-btn" id="themeToggle" aria-label="Cambiar tema">
+          <svg id="iconMoon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg id="iconSun" style="display:none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </button>
+        <a href="#contacto" class="btn btn-primary" style="padding:9px 16px" data-i18n="nav.cta">Contáctame</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================ HERO ============================ -->
+  <section class="hero" id="inicio">
+    <div class="hero-grid"></div>
+    <canvas id="heroCanvas" class="hero-canvas" aria-hidden="true"></canvas>
+    <div class="container hero-inner">
+      <span class="badge"><span class="pulse"></span> <span data-i18n="hero.badge">Disponible para nuevos proyectos</span></span>
+      <h1 data-i18n="hero.h1">Hola, soy <span class="grad">Erick Barrera</span><br>Desarrollador Full Stack</h1>
+      <p class="lead" data-i18n="hero.lead">Desarrollador Full Stack Junior especialista en desarrollo web, desde Guatemala. Construyo aplicaciones web rápidas, accesibles y bien diseñadas, convirtiendo ideas en productos reales y funcionales.</p>
+      <div class="hero-actions">
+        <a href="#proyectos" class="btn btn-primary" data-magnetic><span data-i18n="hero.viewProjects">Ver proyectos</span>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="cv-erick-barrera.pdf" download="CV-Erick-Barrera.pdf" target="_blank" rel="noopener" class="btn btn-ghost" data-magnetic><span data-i18n="hero.downloadCV">Descargar CV</span>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+        </a>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/ebarrera2019263" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.85 9.73.5.1.68-.22.68-.49v-1.7c-2.78.62-3.37-1.36-3.37-1.36-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.57 2.34 1.12 2.91.85.09-.66.35-1.12.63-1.37-2.22-.26-4.55-1.14-4.55-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9v2.82c0 .27.18.59.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg></a>
+        <a href="https://www.linkedin.com/in/erickbarrera2" target="_blank" rel="noopener" class="icon-btn" aria-label="LinkedIn"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V10.5H5.67v7.84h2.67zM7 9.34a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9V14.2c0-2.3-1.23-3.37-2.87-3.37-1.32 0-1.91.73-2.24 1.24v-1.07H10.6c.03.75 0 7.84 0 7.84h2.63v-4.38c0-.24.02-.47.09-.64.19-.47.62-.96 1.34-.96.95 0 1.33.72 1.33 1.78v4.2h2.65z"/></svg></a>
+        <a href="mailto:ebarreraochoa11@gmail.com" class="icon-btn" aria-label="Email"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ SOBRE MÍ ============================ -->
+  <section id="sobre-mi">
+    <div class="container">
+      <div class="about-grid reveal">
+        <div class="avatar-wrap" data-tilt data-tilt-max="12">
+          <div class="avatar">
+            <img src="erick.jpeg" alt="Foto de Erick Alexander Barrera Ochoa" style="width:100%;height:100%;object-fit:cover">
+          </div>
+        </div>
+        <div class="about-text">
+          <span class="eyebrow" data-i18n="about.eyebrow">Sobre mí</span>
+          <h2 style="font-size:clamp(26px,4vw,36px);margin-bottom:20px" data-i18n="about.title">Un poco de mi historia</h2>
+          <p data-i18n="about.p1">Soy <strong>Erick Alexander Barrera Ochoa</strong>, Desarrollador Full Stack Junior desde Guatemala. Me apasiona crear productos digitales que resuelven problemas reales, disfrutando el proceso completo: desde entender la necesidad hasta entregar una interfaz pulida que la gente disfruta usar.</p>
+          <p data-i18n="about.p2">Me formé en <strong>Fundación Kinal</strong> y actualmente desarrollo en <strong>Consortium Legal</strong>, trabajando con tecnologías web modernas para construir desde landing pages hasta sistemas más complejos. Me importa el detalle, el rendimiento y la accesibilidad.</p>
+          <div class="stats">
+            <div class="stat"><div class="num accent">Full Stack</div><div class="lbl" data-i18n="about.stat1">Desarrollo web</div></div>
+            <div class="stat"><div class="num accent">Kinal</div><div class="lbl" data-i18n="about.stat2">Formación técnica</div></div>
+            <div class="stat"><div class="num accent">GT</div><div class="lbl" data-i18n="about.stat3">Guatemala</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ SKILLS ============================ -->
+  <section id="skills" style="background:var(--muted)">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow" data-i18n="skills.eyebrow">Stack tecnológico</span>
+        <h2 data-i18n="skills.title">Tecnologías con las que construyo</h2>
+        <p data-i18n="skills.desc">El conjunto de herramientas que uso para llevar una idea desde el diseño hasta producción.</p>
+      </div>
+
+      <div class="tech-stack">
+
+        <!-- ===== FRONTEND ===== -->
+        <div class="tech-group reveal">
+          <h3 class="tech-group-title"><span class="accent">/</span> <span data-i18n="skills.frontend">Frontend</span></h3>
+          <div class="tech-grid">
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-react-original colored"></i><span>React</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-angularjs-plain colored"></i><span>Angular</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-nextjs-plain"></i><span>Next.js</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-typescript-plain colored"></i><span>TypeScript</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-javascript-plain colored"></i><span>JavaScript</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-tailwindcss-plain colored"></i><span>Tailwind</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-html5-plain colored"></i><span>HTML5</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-css3-plain colored"></i><span>CSS3</span></div>
+          </div>
+        </div>
+
+        <!-- ===== BACKEND ===== -->
+        <div class="tech-group reveal">
+          <h3 class="tech-group-title"><span class="accent">/</span> <span data-i18n="skills.backend">Backend</span></h3>
+          <div class="tech-grid">
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-nodejs-plain colored"></i><span>Node.js</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-nestjs-plain colored"></i><span>NestJS</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-express-original"></i><span>Express</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-python-plain colored"></i><span>Python</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14">
+              <svg class="ti-svg" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 9l-3 3 3 3m8-6l3 3-3 3M14 4l-4 16"/></svg>
+              <span>REST APIs</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== BASES DE DATOS ===== -->
+        <div class="tech-group reveal">
+          <h3 class="tech-group-title"><span class="accent">/</span> <span data-i18n="skills.databases">Bases de datos</span></h3>
+          <div class="tech-grid">
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-postgresql-plain colored"></i><span>PostgreSQL</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-mysql-plain colored"></i><span>MySQL</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-microsoftsqlserver-plain colored"></i><span>SQL Server</span></div>
+          </div>
+        </div>
+
+        <!-- ===== HERRAMIENTAS ===== -->
+        <div class="tech-group reveal">
+          <h3 class="tech-group-title"><span class="accent">/</span> <span data-i18n="skills.tools">Herramientas</span></h3>
+          <div class="tech-grid">
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-git-plain colored"></i><span>Git</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-github-plain"></i><span>GitHub</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-docker-plain colored"></i><span>Docker</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-vscode-plain colored"></i><span>VS Code</span></div>
+            <div class="tech-item" data-tilt data-tilt-max="14"><i class="devicon-figma-plain colored"></i><span>Figma</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ PROYECTOS ============================ -->
+  <section id="proyectos">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow" data-i18n="projects.eyebrow">Portafolio</span>
+        <h2 data-i18n="projects.title">Proyectos seleccionados</h2>
+        <p data-i18n="projects.desc">Una muestra de las cosas que he construido. Cada uno resuelve un problema real.</p>
+      </div>
+      <div class="projects-grid">
+
+        <!-- ===== PROYECTO: WEBHOOKS API ===== -->
+        <article class="card reveal" data-tilt data-tilt-max="9">
+          <div class="card-thumb" style="background:radial-gradient(120% 140% at 12% 18%,#4338ca 0%,#312e81 38%,#1e1b4b 70%),linear-gradient(135deg,#4f46e5,#06b6d4)">
+            <svg viewBox="0 0 320 180" style="width:100%;height:100%;opacity:1" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="wbGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <linearGradient id="wbDot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#67e8f9"/><stop offset="1" stop-color="#a5f3fc"/></linearGradient>
+              </defs>
+
+              <!-- puntos decorativos de fondo -->
+              <g fill="#ffffff" opacity="0.06"><circle cx="30" cy="24" r="2"/><circle cx="70" cy="24" r="2"/><circle cx="290" cy="158" r="2"/><circle cx="250" cy="158" r="2"/></g>
+
+              <!-- rutas de entrega -->
+              <g stroke="#a5b4fc" stroke-width="2.2" fill="none" opacity="0.40" stroke-linecap="round">
+                <path d="M70 90 H150"/>
+                <path d="M150 90 C212 90 222 46 256 46"/>
+                <path d="M150 90 H256"/>
+                <path d="M150 90 C212 90 222 134 256 134"/>
+              </g>
+
+              <!-- paquetes de datos animados -->
+              <g filter="url(#wbGlow)">
+                <circle r="3.4" fill="url(#wbDot)"><animateMotion dur="1.9s" repeatCount="indefinite" path="M70 90 H150 C212 90 222 46 256 46"/></circle>
+                <circle r="3.4" fill="url(#wbDot)"><animateMotion dur="1.9s" begin="0.6s" repeatCount="indefinite" path="M70 90 H256"/></circle>
+                <circle r="3.4" fill="url(#wbDot)"><animateMotion dur="1.9s" begin="1.2s" repeatCount="indefinite" path="M70 90 H150 C212 90 222 134 256 134"/></circle>
+              </g>
+
+              <!-- emisor de eventos -->
+              <g filter="url(#wbGlow)">
+                <circle cx="44" cy="90" r="26" fill="#ffffff" opacity="0.14"/>
+                <circle cx="44" cy="90" r="26" fill="none" stroke="#ffffff" stroke-opacity="0.85" stroke-width="2"/>
+                <path d="M48 74 L36 94 H46 L42 106 L56 86 H46 Z" fill="#fde047"/>
+              </g>
+
+              <!-- API / cola -->
+              <g filter="url(#wbGlow)">
+                <rect x="122" y="62" width="56" height="56" rx="13" fill="#ffffff" opacity="0.15"/>
+                <rect x="122" y="62" width="56" height="56" rx="13" fill="none" stroke="#ffffff" stroke-opacity="0.8" stroke-width="2"/>
+              </g>
+              <g stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.92"><path d="M134 80 H166"/><path d="M134 90 H166"/><path d="M134 100 H158"/></g>
+              <!-- candado HMAC -->
+              <g transform="translate(172 62)">
+                <circle r="11" fill="#10b981"/>
+                <rect x="-5" y="-1" width="10" height="8" rx="1.8" fill="#ffffff"/>
+                <path d="M-3 -1 V-4 a3 3 0 0 1 6 0 V-1" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+              </g>
+
+              <!-- endpoints suscritos -->
+              <g filter="url(#wbGlow)">
+                <circle cx="270" cy="46" r="15" fill="#ffffff"/><path d="M264 46 l4 4 l8 -8" stroke="#4f46e5" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="270" cy="90" r="15" fill="#ffffff"/><path d="M264 90 l4 4 l8 -8" stroke="#4f46e5" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="270" cy="134" r="15" fill="#ffffff"/><path d="M264 134 l4 4 l8 -8" stroke="#4f46e5" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+            </svg>
+          </div>
+          <div class="card-body">
+            <h3>Webhooks API</h3>
+            <p data-i18n="proj.webhooks">API lista para producción que recibe eventos y los entrega a URLs suscritas de forma asíncrona, con reintentos automáticos (backoff exponencial), firma HMAC, idempotencia y manejo de fallos. Colas con BullMQ, métricas Prometheus, panel de colas en vivo y documentación Swagger.</p>
+            <div class="card-tags"><span class="tag">NestJS</span><span class="tag">TypeScript</span><span class="tag">PostgreSQL</span><span class="tag">Redis</span><span class="tag">BullMQ</span><span class="tag">Docker</span></div>
+            <div class="card-links">
+              <a href="https://webhooks-api-ips1.onrender.com/api/docs" target="_blank" rel="noopener"><span data-i18n="common.demo">Ver demo</span> <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M7 7h10v10"/></svg></a>
+              <a href="https://github.com/ebarrera2019263/webhooks-api" target="_blank" rel="noopener"><span data-i18n="common.code">Código</span> <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== PROYECTO: WEATHER DASHBOARD ===== -->
+        <article class="card reveal" data-tilt data-tilt-max="9">
+          <div class="card-thumb has-img" style="background:#0a0f1c">
+            <img src="weather-dashboard.png" alt="Captura de Weather Dashboard — clima de Ciudad de Guatemala en tiempo real" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:top center">
+          </div>
+          <div class="card-body">
+            <h3>Weather Dashboard</h3>
+            <p data-i18n="proj.weather">Aplicación web para consultar el clima en tiempo real de cualquier ciudad y comparar el clima entre varias ubicaciones. Búsqueda con autocompletado, temperatura, humedad y pronóstico en una interfaz limpia.</p>
+            <div class="card-tags"><span class="tag">React</span><span class="tag">Vite</span><span class="tag">Weather API</span><span class="tag">CSS Modules</span></div>
+            <div class="card-links">
+              <a href="https://weather-dashboard-two-brown.vercel.app/" target="_blank" rel="noopener"><span data-i18n="common.demo">Ver demo</span> <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M7 7h10v10"/></svg></a>
+              <a href="https://github.com/ebarrera2019263/Weather-Dashboard" target="_blank" rel="noopener"><span data-i18n="common.code">Código</span> <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== PROYECTO: COFFEETRACKER (Neo4j) ===== -->
+        <article class="card reveal" data-tilt data-tilt-max="9">
+          <div class="card-thumb has-img" style="background:#2b1a10">
+            <img src="coffeetracker.png" alt="Captura de CoffeeTracker — listado de cafeterías y cadena de trazabilidad" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:top left">
+          </div>
+          <div class="card-body">
+            <h3>CoffeeTracker ☕</h3>
+            <p data-i18n="proj.coffee">App de trazabilidad de café de especialidad guatemalteco. Recorre el grafo desde la cafetería hasta el productor (Cafetería → Tostador → Beneficio → Finca → Productor), modelando la cadena completa con una base de datos de grafos Neo4j.</p>
+            <div class="card-tags"><span class="tag">Next.js</span><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Neo4j</span><span class="tag">Tailwind</span></div>
+            <div class="card-links">
+              <a href="https://coffe-tracker-neo4j.vercel.app/" target="_blank" rel="noopener"><span data-i18n="common.demo">Ver demo</span> <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M7 7h10v10"/></svg></a>
+              <a href="https://github.com/ebarrera2019263/Coffe_trackerNeo4j" target="_blank" rel="noopener"><span data-i18n="common.code">Código</span> <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== PROYECTO: SISTEMA ADMINISTRATIVO LEGAL ===== -->
+        <article class="card reveal" data-tilt data-tilt-max="9">
+          <div class="card-thumb has-img" style="background:#0e1424">
+            <img src="sistema-legal.png" alt="Pantalla de inicio de sesión del sistema administrativo — Consortium Legal" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center">
+          </div>
+          <div class="card-body">
+            <h3>Sistema Administrativo — Firma Legal</h3>
+            <p data-i18n="proj.legal">Plataforma administrativa integral para una firma legal: gestión de casos judiciales, escrituras notariales, control de plazos, contabilidad, recursos humanos y más. Backend modular con API REST y despliegue en contenedores.</p>
+            <div class="card-tags"><span class="tag">Django</span><span class="tag">DRF</span><span class="tag">PostgreSQL</span><span class="tag">Docker</span></div>
+            <div class="demo-creds">
+              <span class="lock" data-i18n="legal.privateRepo">🔒 Repositorio privado</span>
+              <span data-i18n="legal.creds">Demo · usuario <code>BAR000</code> · clave <code>RACSA@2026</code></span>
+            </div>
+            <div class="card-links">
+              <a href="https://admimistrativogt.netlify.app/login" target="_blank" rel="noopener"><span data-i18n="common.demo">Ver demo</span> <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M7 7h10v10"/></svg></a>
+              <span class="link-private"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="9" rx="2"/><path stroke-linecap="round" d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> <span data-i18n="legal.privateCode">Código privado</span></span>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== PROYECTO: CHAT WITH PDFs (RAG) ===== -->
+        <article class="card reveal" data-tilt data-tilt-max="9">
+          <div class="card-thumb" style="background:linear-gradient(140deg,#3b0764,#6d28d9 50%,#a855f7)">
+            <svg viewBox="0 0 320 180" style="width:100%;height:100%;opacity:1" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="pdfShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1e0a3c" flood-opacity="0.45"/></filter>
+              </defs>
+              <!-- Documento PDF -->
+              <g filter="url(#pdfShadow)">
+                <rect x="30" y="34" width="104" height="118" rx="10" fill="#ffffff"/>
+                <path d="M118 34 h0 a10 10 0 0 1 10 10 v0 l-16 -10 z" fill="#e9d5ff"/>
+              </g>
+              <rect x="44" y="50" width="46" height="18" rx="5" fill="#ef4444"/>
+              <text x="67" y="63" fill="#fff" font-family="system-ui,sans-serif" font-size="11" font-weight="800" text-anchor="middle" letter-spacing="0.5">PDF</text>
+              <g fill="#d8d0e8"><rect x="44" y="80" width="76" height="6" rx="3"/><rect x="44" y="94" width="76" height="6" rx="3"/><rect x="44" y="108" width="60" height="6" rx="3"/><rect x="44" y="122" width="70" height="6" rx="3"/><rect x="44" y="136" width="40" height="6" rx="3"/></g>
+              <!-- Burbuja del usuario -->
+              <g>
+                <rect x="176" y="44" width="118" height="34" rx="12" fill="#ede9fe"/>
+                <rect x="190" y="56" width="74" height="5" rx="2.5" fill="#7c3aed"/>
+                <rect x="190" y="66" width="50" height="5" rx="2.5" fill="#a78bfa"/>
+              </g>
+              <!-- Burbuja de la IA (respuesta) -->
+              <g>
+                <rect x="160" y="92" width="134" height="64" rx="14" fill="#ffffff"/>
+                <path d="M168 100 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3 z" fill="#7c3aed"/>
+                <g fill="#cdbff0"><rect x="184" y="102" width="98" height="5" rx="2.5"/><rect x="174" y="116" width="108" height="5" rx="2.5"/><rect x="174" y="130" width="92" height="5" rx="2.5"/><rect x="174" y="144" width="64" height="5" rx="2.5"/></g>
+              </g>
+            </svg>
+          </div>
+          <div class="card-body">
+            <h3>Chat con tus PDFs (RAG)</h3>
+            <p data-i18n="proj.pdf">Aplicación RAG donde subes documentos PDF y haces preguntas en lenguaje natural. Las respuestas las genera Claude usando únicamente el contenido de tus documentos, con citas a la fuente y respuestas en streaming.</p>
+            <div class="card-tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Claude</span><span class="tag">Qdrant</span><span class="tag">RAG</span></div>
+            <div class="card-links">
+              <a href="https://chatea-con-tus-pdfs.onrender.com/" target="_blank" rel="noopener"><span data-i18n="common.demo">Ver demo</span> <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M7 7h10v10"/></svg></a>
+              <a href="https://github.com/ebarrera2019263/chat-with-pdfs-rag" target="_blank" rel="noopener"><span data-i18n="common.code">Código</span> <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ CONTACTO ============================ -->
+  <section id="contacto">
+    <div class="container">
+      <div class="contact-card reveal">
+        <h2 data-i18n="contact.title">¿Trabajamos juntos?</h2>
+        <p data-i18n="contact.desc">Estoy abierto a nuevas oportunidades y colaboraciones. Escríbeme y te respondo pronto.</p>
+        <a href="mailto:ebarreraochoa11@gmail.com" class="btn btn-primary" data-magnetic><span data-i18n="contact.cta">Enviar mensaje</span>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer>
+    <div class="container footer-inner">
+      <p data-i18n="footer.text">© 2026 Erick Alexander Barrera Ochoa. Hecho con dedicación.</p>
+      <div class="socials" style="margin:0">
+        <a href="https://github.com/ebarrera2019263" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.85 9.73.5.1.68-.22.68-.49v-1.7c-2.78.62-3.37-1.36-3.37-1.36-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.57 2.34 1.12 2.91.85.09-.66.35-1.12.63-1.37-2.22-.26-4.55-1.14-4.55-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9v2.82c0 .27.18.59.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg></a>
+        <a href="https://www.linkedin.com/in/erickbarrera2" target="_blank" rel="noopener" class="icon-btn" aria-label="LinkedIn"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V10.5H5.67v7.84h2.67zM7 9.34a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9V14.2c0-2.3-1.23-3.37-2.87-3.37-1.32 0-1.91.73-2.24 1.24v-1.07H10.6c.03.75 0 7.84 0 7.84h2.63v-4.38c0-.24.02-.47.09-.64.19-.47.62-.96 1.34-.96.95 0 1.33.72 1.33 1.78v4.2h2.65z"/></svg></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ============================================================
+       i18n — Traducciones Español / Inglés
+       ============================================================ */
+    const I18N = {
+      es: {
+        'nav.about': 'Sobre mí', 'nav.skills': 'Skills', 'nav.projects': 'Proyectos',
+        'nav.contact': 'Contacto', 'nav.cta': 'Contáctame',
+        'hero.badge': 'Disponible para nuevos proyectos',
+        'hero.h1': 'Hola, soy <span class="grad">Erick Barrera</span><br>Desarrollador Full Stack',
+        'hero.lead': 'Desarrollador Full Stack Junior especialista en desarrollo web, desde Guatemala. Construyo aplicaciones web rápidas, accesibles y bien diseñadas, convirtiendo ideas en productos reales y funcionales.',
+        'hero.viewProjects': 'Ver proyectos', 'hero.downloadCV': 'Descargar CV',
+        'about.eyebrow': 'Sobre mí', 'about.title': 'Un poco de mi historia',
+        'about.p1': 'Soy <strong>Erick Alexander Barrera Ochoa</strong>, Desarrollador Full Stack Junior desde Guatemala. Me apasiona crear productos digitales que resuelven problemas reales, disfrutando el proceso completo: desde entender la necesidad hasta entregar una interfaz pulida que la gente disfruta usar.',
+        'about.p2': 'Me formé en <strong>Fundación Kinal</strong> y actualmente desarrollo en <strong>Consortium Legal</strong>, trabajando con tecnologías web modernas para construir desde landing pages hasta sistemas más complejos. Me importa el detalle, el rendimiento y la accesibilidad.',
+        'about.stat1': 'Desarrollo web', 'about.stat2': 'Formación técnica', 'about.stat3': 'Guatemala',
+        'skills.eyebrow': 'Stack tecnológico', 'skills.title': 'Tecnologías con las que construyo',
+        'skills.desc': 'El conjunto de herramientas que uso para llevar una idea desde el diseño hasta producción.',
+        'skills.frontend': 'Frontend', 'skills.backend': 'Backend', 'skills.databases': 'Bases de datos', 'skills.tools': 'Herramientas',
+        'projects.eyebrow': 'Portafolio', 'projects.title': 'Proyectos seleccionados',
+        'projects.desc': 'Una muestra de las cosas que he construido. Cada uno resuelve un problema real.',
+        'proj.webhooks': 'API lista para producción que recibe eventos y los entrega a URLs suscritas de forma asíncrona, con reintentos automáticos (backoff exponencial), firma HMAC, idempotencia y manejo de fallos. Colas con BullMQ, métricas Prometheus, panel de colas en vivo y documentación Swagger.',
+        'proj.weather': 'Aplicación web para consultar el clima en tiempo real de cualquier ciudad y comparar el clima entre varias ubicaciones. Búsqueda con autocompletado, temperatura, humedad y pronóstico en una interfaz limpia.',
+        'proj.coffee': 'App de trazabilidad de café de especialidad guatemalteco. Recorre el grafo desde la cafetería hasta el productor (Cafetería → Tostador → Beneficio → Finca → Productor), modelando la cadena completa con una base de datos de grafos Neo4j.',
+        'proj.legal': 'Plataforma administrativa integral para una firma legal: gestión de casos judiciales, escrituras notariales, control de plazos, contabilidad, recursos humanos y más. Backend modular con API REST y despliegue en contenedores.',
+        'proj.pdf': 'Aplicación RAG donde subes documentos PDF y haces preguntas en lenguaje natural. Las respuestas las genera Claude usando únicamente el contenido de tus documentos, con citas a la fuente y respuestas en streaming.',
+        'legal.privateRepo': '🔒 Repositorio privado',
+        'legal.creds': 'Demo · usuario <code>BAR000</code> · clave <code>RACSA@2026</code>',
+        'legal.privateCode': 'Código privado',
+        'common.demo': 'Ver demo', 'common.code': 'Código',
+        'contact.title': '¿Trabajamos juntos?',
+        'contact.desc': 'Estoy abierto a nuevas oportunidades y colaboraciones. Escríbeme y te respondo pronto.',
+        'contact.cta': 'Enviar mensaje',
+        'footer.text': '© 2026 Erick Alexander Barrera Ochoa. Hecho con dedicación.'
+      },
+      en: {
+        'nav.about': 'About', 'nav.skills': 'Skills', 'nav.projects': 'Projects',
+        'nav.contact': 'Contact', 'nav.cta': 'Get in touch',
+        'hero.badge': 'Available for new projects',
+        'hero.h1': "Hi, I'm <span class=\"grad\">Erick Barrera</span><br>Full Stack Developer",
+        'hero.lead': 'Junior Full Stack Developer specializing in web development, based in Guatemala. I build fast, accessible and well-designed web applications, turning ideas into real, functional products.',
+        'hero.viewProjects': 'View projects', 'hero.downloadCV': 'Download CV',
+        'about.eyebrow': 'About me', 'about.title': 'A bit of my story',
+        'about.p1': "I'm <strong>Erick Alexander Barrera Ochoa</strong>, a Junior Full Stack Developer from Guatemala. I'm passionate about building digital products that solve real problems, enjoying the whole process: from understanding the need to delivering a polished interface people enjoy using.",
+        'about.p2': 'I trained at <strong>Fundación Kinal</strong> and currently develop at <strong>Consortium Legal</strong>, working with modern web technologies to build everything from landing pages to more complex systems. I care about detail, performance and accessibility.',
+        'about.stat1': 'Web development', 'about.stat2': 'Technical training', 'about.stat3': 'Guatemala',
+        'skills.eyebrow': 'Tech stack', 'skills.title': 'Technologies I build with',
+        'skills.desc': 'The toolkit I use to take an idea from design all the way to production.',
+        'skills.frontend': 'Frontend', 'skills.backend': 'Backend', 'skills.databases': 'Databases', 'skills.tools': 'Tools',
+        'projects.eyebrow': 'Portfolio', 'projects.title': 'Selected projects',
+        'projects.desc': "A sample of the things I've built. Each one solves a real problem.",
+        'proj.webhooks': 'Production-ready API that receives events and delivers them to subscribed URLs asynchronously, with automatic retries (exponential backoff), HMAC signing, idempotency and failure handling. Queues with BullMQ, Prometheus metrics, a live queue dashboard and Swagger docs.',
+        'proj.weather': 'Web app to check real-time weather for any city and compare weather across multiple locations. Autocomplete search, temperature, humidity and forecast in a clean interface.',
+        'proj.coffee': 'Traceability app for Guatemalan specialty coffee. It walks the graph from the coffee shop back to the producer (Shop → Roaster → Mill → Farm → Producer), modeling the full chain with a Neo4j graph database.',
+        'proj.legal': 'Comprehensive administrative platform for a law firm: court case management, notarial deeds, deadline control, accounting, human resources and more. Modular backend with a REST API and containerized deployment.',
+        'proj.pdf': 'RAG application where you upload PDF documents and ask questions in natural language. Answers are generated by Claude using only your documents’ content, with source citations and streaming responses.',
+        'legal.privateRepo': '🔒 Private repository',
+        'legal.creds': 'Demo · user <code>BAR000</code> · password <code>RACSA@2026</code>',
+        'legal.privateCode': 'Private code',
+        'common.demo': 'Live demo', 'common.code': 'Code',
+        'contact.title': "Let's work together?",
+        'contact.desc': "I'm open to new opportunities and collaborations. Drop me a line and I'll reply soon.",
+        'contact.cta': 'Send message',
+        'footer.text': '© 2026 Erick Alexander Barrera Ochoa. Made with dedication.'
+      }
+    };
+
+    const langToggle = document.getElementById('langToggle');
+    const langLabel = document.getElementById('langLabel');
+
+    function applyLang(lang) {
+      if (!I18N[lang]) lang = 'es';
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const v = I18N[lang][el.getAttribute('data-i18n')];
+        if (v !== undefined) el.innerHTML = v;
+      });
+      langLabel.textContent = lang === 'es' ? 'EN' : 'ES';
+      localStorage.setItem('lang', lang);
+    }
+
+    const savedLang = localStorage.getItem('lang');
+    const browserLang = (navigator.language || 'es').toLowerCase().startsWith('en') ? 'en' : 'es';
+    applyLang(savedLang || browserLang);
+
+    langToggle.addEventListener('click', () => {
+      applyLang(document.documentElement.lang === 'es' ? 'en' : 'es');
+    });
+
+    /* ===== Modo claro / oscuro ===== */
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    const iconMoon = document.getElementById('iconMoon');
+    const iconSun = document.getElementById('iconSun');
+
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(saved || (prefersDark ? 'dark' : 'light'));
+
+    function setTheme(theme) {
+      root.setAttribute('data-theme', theme);
+      iconMoon.style.display = theme === 'dark' ? 'none' : 'block';
+      iconSun.style.display = theme === 'dark' ? 'block' : 'none';
+      localStorage.setItem('theme', theme);
+    }
+    toggle.addEventListener('click', () => {
+      setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+
+    /* ===== Animaciones de aparición al hacer scroll ===== */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('in'), i * 60);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* ===== ¿El usuario prefiere menos movimiento? ===== */
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ============================================================
+       TILT 3D — tarjetas y avatar siguen el cursor
+       ============================================================ */
+    if (!reduceMotion) {
+      document.querySelectorAll('[data-tilt]').forEach(el => {
+        const max = parseFloat(el.dataset.tiltMax || 10);
+        const target = el.querySelector('.avatar') || el; // el avatar inclina el hijo
+        el.addEventListener('pointermove', (e) => {
+          const r = el.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width;   // 0..1
+          const py = (e.clientY - r.top) / r.height;   // 0..1
+          target.style.setProperty('--ry', ((px - 0.5) * 2 * max).toFixed(2) + 'deg');
+          target.style.setProperty('--rx', ((0.5 - py) * 2 * max).toFixed(2) + 'deg');
+          target.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+          target.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+        });
+        el.addEventListener('pointerleave', () => {
+          target.style.setProperty('--rx', '0deg');
+          target.style.setProperty('--ry', '0deg');
+        });
+      });
+
+      /* ============================================================
+         BOTONES MAGNÉTICOS — se atraen al puntero
+         ============================================================ */
+      document.querySelectorAll('[data-magnetic]').forEach(btn => {
+        btn.style.willChange = 'transform';
+        btn.addEventListener('pointermove', (e) => {
+          const r = btn.getBoundingClientRect();
+          const x = e.clientX - r.left - r.width / 2;
+          const y = e.clientY - r.top - r.height / 2;
+          btn.style.transform = `translate(${x * 0.3}px, ${y * 0.4}px)`;
+        });
+        btn.addEventListener('pointerleave', () => { btn.style.transform = ''; });
+      });
+
+      /* ============================================================
+         PARALLAX 3D del texto del hero
+         ============================================================ */
+      const heroInner = document.querySelector('.hero-inner');
+      const heroSection = document.getElementById('inicio');
+      if (heroInner && heroSection) {
+        heroSection.addEventListener('pointermove', (e) => {
+          const r = heroSection.getBoundingClientRect();
+          const dx = (e.clientX - r.left) / r.width - 0.5;
+          const dy = (e.clientY - r.top) / r.height - 0.5;
+          heroInner.style.transform = `rotateY(${dx * 5}deg) rotateX(${-dy * 5}deg) translateZ(0)`;
+        });
+        heroSection.addEventListener('pointerleave', () => { heroInner.style.transform = ''; });
+      }
+    }
+
+    /* ============================================================
+       ESCENA 3D DEL HERO (Three.js) — figura wireframe + partículas
+       ============================================================ */
+    function initHero3D() {
+      const canvas = document.getElementById('heroCanvas');
+      const hero = document.getElementById('inicio');
+      if (!canvas || !hero || typeof THREE === 'undefined' || reduceMotion) return;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
+      camera.position.z = 5;
+
+      function accentColor() {
+        const c = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        return new THREE.Color(c || '#2563EB');
+      }
+
+      const group = new THREE.Group();
+      scene.add(group);
+
+      // Figura central: icosaedro wireframe
+      const geo = new THREE.IcosahedronGeometry(1.6, 1);
+      const wire = new THREE.LineSegments(
+        new THREE.WireframeGeometry(geo),
+        new THREE.LineBasicMaterial({ color: accentColor(), transparent: true, opacity: 0.55 })
+      );
+      group.add(wire);
+
+      // Vértices brillantes
+      const dots = new THREE.Points(
+        geo,
+        new THREE.PointsMaterial({ color: accentColor(), size: 0.07 })
+      );
+      group.add(dots);
+
+      // Campo de partículas alrededor
+      const N = 320;
+      const pos = new Float32Array(N * 3);
+      for (let i = 0; i < N * 3; i++) pos[i] = (Math.random() - 0.5) * 14;
+      const fieldGeo = new THREE.BufferGeometry();
+      fieldGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      const field = new THREE.Points(
+        fieldGeo,
+        new THREE.PointsMaterial({ color: accentColor(), size: 0.035, transparent: true, opacity: 0.6 })
+      );
+      scene.add(field);
+
+      // Reaccionar al cambio de tema
+      window.addEventListener('themechange', () => {
+        const c = accentColor();
+        wire.material.color = c; dots.material.color = c; field.material.color = c;
+      });
+
+      // Mouse parallax
+      let mx = 0, my = 0, tmx = 0, tmy = 0;
+      window.addEventListener('pointermove', (e) => {
+        tmx = (e.clientX / window.innerWidth - 0.5);
+        tmy = (e.clientY / window.innerHeight - 0.5);
+      });
+
+      function resize() {
+        const w = hero.clientWidth, h = hero.clientHeight;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const clock = new THREE.Clock();
+      let raf;
+      function animate() {
+        raf = requestAnimationFrame(animate);
+        const t = clock.getElapsedTime();
+        group.rotation.y = t * 0.18;
+        group.rotation.x = Math.sin(t * 0.3) * 0.25;
+        field.rotation.y = -t * 0.04;
+        mx += (tmx - mx) * 0.05; my += (tmy - my) * 0.05;
+        camera.position.x = mx * 1.6;
+        camera.position.y = -my * 1.2;
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // Pausar cuando el hero no está visible (ahorra batería)
+      new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          if (en.isIntersecting) { if (!raf) animate(); }
+          else { cancelAnimationFrame(raf); raf = null; }
+        });
+      }, { threshold: 0 }).observe(hero);
+    }
+
+    window.addEventListener('load', initHero3D);
+
+    // Notificar a la escena 3D cuando cambie el tema
+    const _setTheme = setTheme;
+    setTheme = function(theme) { _setTheme(theme); window.dispatchEvent(new Event('themechange')); };
+  </script>
+</body>
+</html>

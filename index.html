@@ -417,6 +417,35 @@
     .contact-card p { color: color-mix(in srgb, var(--on-primary) 70%, transparent); font-size: 18px; max-width: 460px; margin: 0 auto 32px; }
     .contact-card .btn-primary { background: var(--accent); }
 
+    /* CONTACT FORM */
+    .contact-form { max-width: 480px; margin: 0 auto; text-align: left; }
+    .contact-form .field { margin-bottom: 16px; }
+    .contact-form label {
+      display: block; font-size: 14px; font-weight: 600; margin-bottom: 7px;
+      color: color-mix(in srgb, var(--on-primary) 85%, transparent);
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%; padding: 13px 15px; border-radius: var(--radius-sm);
+      border: 1px solid color-mix(in srgb, var(--on-primary) 18%, transparent);
+      background: color-mix(in srgb, var(--on-primary) 7%, transparent);
+      color: var(--on-primary); font: inherit; font-size: 15px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: color-mix(in srgb, var(--on-primary) 45%, transparent); }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: none; border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    .contact-form textarea { resize: vertical; min-height: 120px; }
+    .contact-form .btn-primary { width: 100%; justify-content: center; margin-top: 4px; }
+    .form-hidden { display: none; }
+    .form-status { margin: 14px 0 0; font-size: 15px; font-weight: 600; text-align: center; min-height: 1px; }
+    .form-status.ok { color: #34D399; }
+    .form-status.err { color: #FCA5A5; }
+
     /* FOOTER */
     footer { padding: 40px 0; border-top: 1px solid var(--border); }
     .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
@@ -799,9 +828,29 @@
       <div class="contact-card reveal">
         <h2 data-i18n="contact.title">¿Trabajamos juntos?</h2>
         <p data-i18n="contact.desc">Estoy abierto a nuevas oportunidades y colaboraciones. Escríbeme y te respondo pronto.</p>
-        <a href="mailto:ebarreraochoa11@gmail.com" class="btn btn-primary" data-magnetic><span data-i18n="contact.cta">Enviar mensaje</span>
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
+
+        <form name="contacto" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="contact-form" id="contactForm">
+          <input type="hidden" name="form-name" value="contacto" />
+          <p class="form-hidden">
+            <label>No llenar este campo: <input name="bot-field" /></label>
+          </p>
+          <div class="field">
+            <label for="cf-name" data-i18n="contact.name">Nombre</label>
+            <input type="text" id="cf-name" name="nombre" required placeholder="Tu nombre" data-i18n-placeholder="contact.name.ph" />
+          </div>
+          <div class="field">
+            <label for="cf-email" data-i18n="contact.email">Correo</label>
+            <input type="email" id="cf-email" name="email" required placeholder="tucorreo@ejemplo.com" data-i18n-placeholder="contact.email.ph" />
+          </div>
+          <div class="field">
+            <label for="cf-msg" data-i18n="contact.message">Mensaje</label>
+            <textarea id="cf-msg" name="mensaje" required placeholder="Cuéntame en qué puedo ayudarte..." data-i18n-placeholder="contact.message.ph"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" data-magnetic><span data-i18n="contact.cta">Enviar mensaje</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
+        </form>
       </div>
     </div>
   </section>
@@ -854,6 +903,9 @@
         'common.demo': 'Ver demo', 'common.code': 'Código',
         'contact.title': '¿Trabajamos juntos?',
         'contact.desc': 'Estoy abierto a nuevas oportunidades y colaboraciones. Escríbeme y te respondo pronto.',
+        'contact.name': 'Nombre', 'contact.name.ph': 'Tu nombre',
+        'contact.email': 'Correo', 'contact.email.ph': 'tucorreo@ejemplo.com',
+        'contact.message': 'Mensaje', 'contact.message.ph': 'Cuéntame en qué puedo ayudarte...',
         'contact.cta': 'Enviar mensaje',
         'footer.text': '© 2026 Erick Alexander Barrera Ochoa. Hecho con dedicación.'
       },
@@ -889,6 +941,9 @@
         'common.demo': 'Live demo', 'common.code': 'Code',
         'contact.title': "Let's work together?",
         'contact.desc': "I'm open to new opportunities and collaborations. Drop me a line and I'll reply soon.",
+        'contact.name': 'Name', 'contact.name.ph': 'Your name',
+        'contact.email': 'Email', 'contact.email.ph': 'youremail@example.com',
+        'contact.message': 'Message', 'contact.message.ph': 'Tell me how I can help you...',
         'contact.cta': 'Send message',
         'footer.text': '© 2026 Erick Alexander Barrera Ochoa. Made with dedication.'
       }
@@ -904,6 +959,10 @@
         const v = I18N[lang][el.getAttribute('data-i18n')];
         if (v !== undefined) el.innerHTML = v;
       });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const v = I18N[lang][el.getAttribute('data-i18n-placeholder')];
+        if (v !== undefined) el.setAttribute('placeholder', v);
+      });
       langLabel.textContent = lang === 'es' ? 'EN' : 'ES';
       localStorage.setItem('lang', lang);
     }
@@ -915,6 +974,43 @@
     langToggle.addEventListener('click', () => {
       applyLang(document.documentElement.lang === 'es' ? 'en' : 'es');
     });
+
+    /* ===== Formulario de contacto (Netlify Forms) ===== */
+    const contactForm = document.getElementById('contactForm');
+    const formStatus = document.getElementById('formStatus');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const lang = document.documentElement.lang === 'en' ? 'en' : 'es';
+        const btn = contactForm.querySelector('button[type="submit"]');
+        const sending = lang === 'en' ? 'Sending…' : 'Enviando…';
+        const okMsg = lang === 'en'
+          ? '✅ Thanks! Your message was sent. I\'ll get back to you soon.'
+          : '✅ ¡Gracias! Tu mensaje fue enviado. Te responderé pronto.';
+        const errMsg = lang === 'en'
+          ? '❌ Something went wrong. Please try again or email me directly.'
+          : '❌ Algo salió mal. Intenta de nuevo o escríbeme directo a mi correo.';
+        const original = btn.innerHTML;
+        btn.disabled = true; btn.style.opacity = '.7';
+        formStatus.className = 'form-status'; formStatus.textContent = sending;
+        try {
+          const data = new FormData(contactForm);
+          await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(data).toString()
+          });
+          formStatus.className = 'form-status ok';
+          formStatus.textContent = okMsg;
+          contactForm.reset();
+        } catch (err) {
+          formStatus.className = 'form-status err';
+          formStatus.textContent = errMsg;
+        } finally {
+          btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = original;
+        }
+      });
+    }
 
     /* ===== Modo claro / oscuro ===== */
     const root = document.documentElement;
